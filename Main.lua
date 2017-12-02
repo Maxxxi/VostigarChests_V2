@@ -44,14 +44,14 @@
 
 	-- Coordonnées des coffres et non de la zone --
 	local coordData = {
-		{Lang.FORETOUBLIE, 	3086, 2849},
-		{Lang.FORETOUBLIE, 	3090, 2844},
-		{Lang.VOIXDESTRUC, 	3445, 2920},
-		{Lang.VOIXDESTRUC, 	3585, 2910},
-		{Lang.VOIXDESTRUC, 	3840, 2827},
-		{Lang.VOIXDESTRUC, 	3926, 2966},
-		{Lang.THEFRONT, 	3810, 2255},
-		{Lang.THEFRONT, 	4055, 2300},
+		{Lang.FORETOUBLIE, 	3086, 2849, nil},
+		{Lang.FORETOUBLIE, 	3090, 2844, nil},
+		{Lang.VOIXDESTRUC, 	3445, 2920, nil},
+		{Lang.VOIXDESTRUC, 	3585, 2910, nil},
+		{Lang.VOIXDESTRUC, 	3840, 2827, nil},
+		{Lang.VOIXDESTRUC, 	3926, 2966, nil},
+		{Lang.THEFRONT, 	3810, 2255, nil},
+		{Lang.THEFRONT, 	4055, 2300, nil},
 	}
 
 	-- Define VostigarChestsSettings table --
@@ -95,20 +95,32 @@
 				window:EventAttach(Event.UI.Input.Mouse.Cursor.Move, 		function(...) 	dragMove(dragState, ...) 	end, "dragMove")
 	end
 
+    local function updateDistances(frame, pX, pY, cX, cY)
+        local distance = math.sqrt( (pX - cX) ^2 + (pY - cY) ^2 )
+        distance = math.ceil(distance)
+        print(distance)
+        frame:SetText(Lang.SPACE .. Lang.SPACE .. Lang.SPACE .. Lang.SPACE .. Lang.SPACE .. Lang.SPACE .. distance .. Lang.SPACE .. Lang.METERS)
+        -- Ajoute une couleur selon la distance --
+        if distance < 500 then
+            -- Ajoute une couleur --
+            frame:SetFontColor(0, 1, 0)
+        elseif distance >= 500 and distance <= 2000 then
+            -- Ajoute une couleur --
+            frame:SetFontColor(1, 1, 0)
+        else
+            -- Ajoute une couleur --
+            frame:SetFontColor(255, 0, 0)
+            frame:SetFontColor(255, 0, 0)
+        end
+    end
+    
 	-- Met à jour les coordonnées du joueur --
 	local function updateChestsCoord()
-		-- Défini 0 s'il n'y a pas de coordonnée pour le joueur --
-		if player.coordX == nil then
-			player.coordX = 0
-		else
-			player.coordX = player.coordX
-		end
-		-- Défini 0 s'il n'y a pas de coordonnée pour le joueur --
-		if player.coordY == nil then
-			player.coordY = 0
-		else
-			player.coordY = player.coordY
-		end
+        for k, v in pairs(coordData) do
+            if v[4] then
+                updateDistances(v[4], Inspect.Unit.Detail("player").coordX, Inspect.Unit.Detail("player").coordY, v[2], v[3])
+            end
+        end
 	end
 
 	-- Vostigar Chests Frame --
@@ -253,6 +265,7 @@
 				-- Ajoute une couleur --
 				cellDistance:SetFontColor(255, 0, 0)
 			end
+            v[4] = cellDistance
 
 			-- Event on Left Clic --
 			cellCoord:EventAttach(Event.UI.Input.Mouse.Left.Click, function(self, h)
