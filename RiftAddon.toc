@@ -1,0 +1,42 @@
+﻿Identifier = "VostigarChest"
+
+Name = "VostigarChest"
+
+Description =
+{
+	English = [[Shows the location of the small chests of the peak of vostigar.]],
+	French = [[Montre l'emplacement des petits coffres du pic de vostigar.]],
+	German = [[Zeigt die Position der kleinen Truhen der Spitze von Vostigar.]],
+}
+
+Author = "Ranadyla@Brisesol"
+Website = "http://bloodyteddybears.com"
+Email = "Ranadyla@"
+
+Version = "1.0"
+
+Environment = "4.3"
+
+--@no-lib-strip@
+Embed = {
+	["libs/LibAsyncTextures"] = true,
+	["libs/LibSimpleWidgets"] = true,
+}
+--@end-no-lib-strip@
+
+Dependencies = {
+	LibAsyncTextures = { "required", "before" },
+	LibSimpleWidgets = {"required", "before"},
+}
+
+RunOnStartup = {
+	"Language/Translate.lua",
+	"Language/Lang/en.lua",
+	"Language/Lang/fr.lua",
+	"Main.lua",
+}
+
+SavedVariables = 
+{
+	VostigarChestsSettings = "account",
+}
