@@ -1,0 +1,9 @@
+2.03r2:
+	- Added new 2.3 zones
+
+2.02r5:
+	- Converted to using the new Event system (NOTE: The existing method of use still works - for now!)
+
+2.02r4:
+	- Fix for player changing zones by walking
+	- Fix for logging in or /reloadui into a 'special' zone

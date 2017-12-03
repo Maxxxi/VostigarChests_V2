@@ -1,0 +1,65 @@
+Finding the players zone can be convoluted - there are a number of events to watch for.
+
+To make matters more confusing, Inspect.Zone.Detail(Inspect.Unit.Detail("player").zone).name does not always return the 'actual' zone the player is in.
+
+The Chronicles pre-Storm Legion, all return the zone the chronicle is housed in, so Chronicle: GSB, gives the .zone and .name for GSB itself, not the Chronicle.
+
+This also applies to the 10 man raid slivers, and Conquest: Stillmoor.
+
+It is possible to work around this, by checking for the zone quests to complete the content.
+
+libZoneChange does all this for you, and raises a simple event to let your addon know the zone the player is in has changed, and what is has changed to.
+
+
+HOW TO USE libZoneChange
+
+1. Create a lib directory in your addon directory, and copy libZoneChange there:
+
+	Addon
+		lib
+			libZoneChange
+				libZone.lua
+				RiftAddon.toc
+		RiftAddon.toc
+		Addon.lua
+
+2. Add entries for libZoneChange into  your RiftAddon.toc:
+
+	Embed = {
+		["lib/libZoneChange"] = true
+	}
+
+	Dependencies = 
+	{
+		libZoneChange = {"required", "before"},
+	}
+
+3. Subscribe to the libZoneChange event:
+
+	Command.Event.Attach(Library.libZoneChange.Player, zc_function, "Library.LibZoneChange.Player")
+
+4. Have your function do whatever it needs to do!
+
+	local function zc_function(h, zoneName, zoneID)
+		print(string.format("Zone Change: %s (%s)", zoneName, zoneID))
+	end
+
+The function is called with three parameters - a handle, the zonename and the zoneID.
+
+NOTE: These are usually, but not always the same as
+
+	Inspect.Unit.Detail("player").zone
+	Inspect.Zone.Detail(Inspect.Unit.Detail("player").zone).name
+	
+If the player has zoned into a chronicle, a 10 man sliver or a conquest, then the parameters passed in will be updated.
+
+The zoneName will be the zoneName as seen on a guild roster ('Conquest: Stillmoor')
+
+The zoneID will be the zoneID as reported by Inspect.Unit.Detail("player").zone, but will have a 3 letter code appended to the end of it.
+
+If you require the unmodified details for any reason, then they are available via the globals:
+
+LIBZONECHANGE.actualZoneID		-- unmodified
+LIBZONECHANGE.actualZoneName	-- unmodified
+LIBZONECHANGE.currentZoneID		-- modified
+LIBZONECHANGE.currentZoneName	-- modified

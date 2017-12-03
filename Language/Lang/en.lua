@@ -11,8 +11,11 @@
 		ADDONSTART = "launched",
 		BTBVOSTIGARCHEST = "Chests of Vostigar",
 		RESETPOI = "Delete POIs",
+		RESETWAYPOINT = "Reset",
 		FORETOUBLIE = "The Forgotten Forest",
 		VOIXDESTRUC = "The path of destruction",
 		THEFRONT = "Forehead",
 		METERS = "meters",
+		MOVETOUPDATE = "move to update",
+		VOSTIGARPIC = "Vostigar Peaks",
 	})

@@ -21,19 +21,26 @@ Environment = "4.3"
 Embed = {
 	["libs/LibAsyncTextures"] = true,
 	["libs/LibSimpleWidgets"] = true,
+	["libs/libZoneChange"] = true
 }
 --@end-no-lib-strip@
 
 Dependencies = {
 	LibAsyncTextures = { "required", "before" },
 	LibSimpleWidgets = {"required", "before"},
+	libZoneChange = {"required", "before"},
 }
 
 RunOnStartup = {
 	"Language/Translate.lua",
 	"Language/Lang/en.lua",
 	"Language/Lang/fr.lua",
-	"Main.lua",
+	"settings.lua",
+	"main.lua",
+	"dragButton.lua",
+	"mouseFunctions.lua",
+	"eventsUpdate.lua",
+	"secureCombat.lua",
 }
 
 SavedVariables = 
