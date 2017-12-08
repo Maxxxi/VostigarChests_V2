@@ -7,6 +7,7 @@
 	local toc, btb = ...
 	local AddonId = toc.identifier
 	local Lang = Library.Translate
+	local screenHeight = UIParent:GetHeight() / 4
 
 	-- Chest coordinates and name of the zone --
 	coordData = {
@@ -19,6 +20,7 @@
 		{Lang.VOIXDESTRUC, 	3925, 2969, nil, nil},
 		{Lang.THEFRONT, 	4033, 2584, nil, nil},
 		{Lang.THEFRONT, 	4055, 2300, nil, nil},
+		{Lang.VALONANKHET, 	4214, 2475, nil, nil},
 	}
 
 	-- Vostigar Chests Frame --
@@ -29,11 +31,11 @@
 		-- Create Main Frame --
 		VostigarChestsWindow = UI.CreateFrame("SimpleWindow", "VostigarChestsWindow", VostigarChestsContext)
 		VostigarChestsWindow:SetVisible(false)
-		VostigarChestsWindow:SetTitle(Lang.BTBVOSTIGARCHEST)
+		VostigarChestsWindow:SetTitle("\n" .. Lang.BTBVOSTIGARCHEST)
 		VostigarChestsWindow:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 60, 60)
 		VostigarChestsWindow:SetCloseButtonVisible(false)
-		VostigarChestsWindow:SetWidth(450)
-		VostigarChestsWindow:SetHeight(350)
+		VostigarChestsWindow:SetWidth(480)
+		VostigarChestsWindow:SetHeight(300)
 
 		-- Create Scrolling Frame --
 		VostigarChestsScrollView = UI.CreateFrame("SimpleScrollView", VostigarChestsWindow:GetName().."_ScrollView", VostigarChestsWindow)
@@ -73,6 +75,17 @@
 		VostigarChestsButtonClose = UI.CreateFrame("RiftButton", VostigarChestsWindow:GetName().."_ButtonClose", VostigarChestsWindow)
 		VostigarChestsButtonClose:SetSkin("close")
 		VostigarChestsButtonClose:SetPoint("TOPRIGHT", VostigarChestsWindow, "TOPRIGHT", -4, 12)
+
+		-- Create Alert Frame --
+		VostigarChestsAlertFrame = UI.CreateFrame("Frame",  VostigarChestsWindow:GetName().."_AlertFrame", VostigarChestsContext)
+		VostigarChestsAlertFrame:SetPoint("CENTER", UIParent, "CENTERTOP",0, screenHeight)
+
+
+		VostigarChestsAlert = UI.CreateFrame("Text", VostigarChestsWindow:GetName().."_VostigarChestsAlert", VostigarChestsAlertFrame)
+		VostigarChestsAlert:SetPoint("CENTER", VostigarChestsAlertFrame, "CENTER", 0, 0)
+		VostigarChestsAlert:SetFontSize(28)
+		VostigarChestsAlert:SetFontColor(1, 1, 1)
+		VostigarChestsAlert:SetEffectGlow({ strength = 3 })
 	end
 
 	-- Write Name and Coord --
@@ -97,7 +110,7 @@
 			-- Zone Distance --
 			local cellDistance = UI.CreateFrame("Text", VostigarChestsWindow:GetName().."_cellDistance", VostigarChestsGrid)
 			cellDistance:SetFontSize(14)
-			cellDistance:SetWidth(VostigarChestsGrid:GetWidth() - (cellName:GetWidth() + cellCoord:GetWidth()) )
+			cellDistance:SetWidth(VostigarChestsGrid:GetWidth() - (cellName:GetWidth() + cellCoord:GetWidth() + cellStatus:GetWidth()) )
 			cellDistance:SetText(Lang.SPACE .. Lang.SPACE .. Lang.SPACE .. Lang.SPACE .. Lang.SPACE .. Lang.SPACE .. Lang.MOVETOUPDATE)
 
 			-- Update cell distance --

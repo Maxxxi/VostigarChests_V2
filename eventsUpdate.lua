@@ -32,6 +32,14 @@
 		end
 	end
 
+	local function alertMessage()
+		if Inspect.System.Watchdog() < 0.1 then return end
+		if Inspect.Time.Real() - InitTime > 5 then
+			InitTime = Inspect.Time.Real()
+			VostigarChestsAlert:SetVisible(false)
+		end
+	end
+
 	-- Poster function of the distance between the player and the chests --
 	local function updateDistances(frame, frameStatus, pX, pY, cX, cZ)
 		-- Distance calculation --
@@ -57,6 +65,8 @@
 				if allreadyPointed == nil and distance <= 100  then
 					-- Add waypoint --
 					Command.Map.Waypoint.Set(cX, cZ)
+					VostigarChestsAlert:SetText(Lang.CHESTSFINDED)
+					alertMessage()
 				elseif allreadyPointed == nil and distance > 100 then
 					-- Erase waypoint --
 					Command.Map.Waypoint.Clear()
@@ -132,12 +142,24 @@
 		else
 			-- Reset Event left Clic on Button --
 			function VostigarChestsButton.Event:LeftClick()
-				return
+				VostigarChestsAlert:SetText("Vous n\'etes pas dans la bonne zone pour afficher la fenêtre.")
+				alertMessage()
+			end	
+
+			-- Event OnMouseIn button --
+			function VostigarChestsButton.Event:MouseIn()
+				if not VostigarChestsWindow.visible then
+					-- Apply texture --
+					self:SetTextureAsync(AddonId, "Pictures/ButtonUp.png")
+				end
 			end
 
-			-- Reset Event on mouse out button --
-			function VostigarChestsButton.Event:MouseIn()
-				return
+			-- Event OnMouseOut button --
+			function VostigarChestsButton.Event:MouseOut()
+				if not VostigarChestsWindow.visible then
+					-- Apply texture --
+					self:SetTextureAsync(AddonId, "Pictures/ButtonDown.png")
+				end
 			end
 
 			-- If the window is open we close it --
@@ -150,9 +172,12 @@
 			end
 		end
 	end
+
+	-- Alert message --
+	Command.Event.Attach(Event.System.Update.Begin, alertMessage, "Alert Message function")
 	
 	-- Update coordinates every X seconds when the player moves --
-	Command.Event.Attach(Event.Unit.Detail.Coord, newUpdate, AddonId .. " Active newUpdate")
+	Command.Event.Attach(Event.Unit.Detail.Coord, newUpdate, AddonId .. "Active newUpdate")
 
 	-- Check the zone in which we are thanks to the library --
 	Command.Event.Attach(Library.libZoneChange.Player, newUpdate, "Library.LibZoneChange.Player")
