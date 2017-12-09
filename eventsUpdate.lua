@@ -32,9 +32,9 @@
 		end
 	end
 
-	local function alertMessage()
+	function alertMessage()
 		if Inspect.System.Watchdog() < 0.1 then return end
-		if Inspect.Time.Real() - InitTime > 5 then
+		if Inspect.Time.Real() - InitTime > 3 then
 			InitTime = Inspect.Time.Real()
 			VostigarChestsAlert:SetVisible(false)
 		end
@@ -77,6 +77,7 @@
 					upWay = {cX, cZ}
 					table.insert(waypointVisited, upWay)
 					frameStatus:SetTexture("Rift", "raid_icon_notready.png.dds")
+					VostigarChestsAlert:SetVisible(false)
 				end
 				frame:SetFontColor(0, 1, 0)
 			elseif distance > 150 and distance <= 700 then

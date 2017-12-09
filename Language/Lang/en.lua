@@ -20,4 +20,6 @@
 		MOVETOUPDATE 		= "move to update",
 		VOSTIGARPIC 		= "Vostigar Peaks",
 		CHESTSFINDED		= "Chest location found",
+		ACTIVEADDON			= "Activate",
+		RELOADUI			= "You must make a reloadui",
 	})

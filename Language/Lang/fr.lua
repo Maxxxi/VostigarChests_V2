@@ -20,4 +20,6 @@
 		MOVETOUPDATE 		= "Déplace toi",
 		VOSTIGARPIC 		= "Pics de Vostigar",
 		CHESTSFINDED		= "Emplaçement de coffre trouvé",
+		ACTIVEADDON			= "Activer",
+		RELOADUI			= "Vous devez faire un reloadui",
 	})

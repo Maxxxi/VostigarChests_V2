@@ -30,27 +30,20 @@
 
 		-- Create Main Frame --
 		VostigarChestsWindow = UI.CreateFrame("SimpleWindow", "VostigarChestsWindow", VostigarChestsContext)
-		VostigarChestsWindow:SetVisible(false)
+		VostigarChestsWindow:SetVisible(true)
 		VostigarChestsWindow:SetTitle("\n" .. Lang.BTBVOSTIGARCHEST)
 		VostigarChestsWindow:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 60, 60)
-		VostigarChestsWindow:SetCloseButtonVisible(false)
+		VostigarChestsWindow:SetCloseButtonVisible(true)
 		VostigarChestsWindow:SetWidth(480)
 		VostigarChestsWindow:SetHeight(300)
 
-		-- Create Scrolling Frame --
-		VostigarChestsScrollView = UI.CreateFrame("SimpleScrollView", VostigarChestsWindow:GetName().."_ScrollView", VostigarChestsWindow)
-		VostigarChestsScrollView:SetPoint("TOPLEFT", VostigarChestsWindow, "TOPLEFT", 30, 70)
-		VostigarChestsScrollView:SetWidth(VostigarChestsWindow:GetWidth() - 60)
-		VostigarChestsScrollView:SetHeight(VostigarChestsWindow:GetHeight() - 120)
-
-		-- Create Grid Frame --
-		VostigarChestsGrid = UI.CreateFrame("SimpleGrid", VostigarChestsWindow:GetName().."_Grid", VostigarChestsScrollView)
-		VostigarChestsGrid:SetPoint("TOPLEFT", VostigarChestsScrollView, "TOPLEFT")
-		VostigarChestsGrid:SetBackgroundColor(0, 0, 0, 0.5)
-		VostigarChestsGrid:SetWidth(VostigarChestsWindow:GetWidth())
-		VostigarChestsGrid:SetHeight(VostigarChestsWindow:GetHeight())
-		VostigarChestsGrid:SetMargin(1)
-		VostigarChestsGrid:SetCellPadding(1)
+		-- CheckBox activation --
+		VostigarChestsCheckBox = UI.CreateFrame("SimpleCheckbox", VostigarChestsWindow:GetName().."_CheckBox", VostigarChestsWindow)
+		VostigarChestsCheckBox:SetPoint("TOPRIGHT", VostigarChestsWindow, "TOPRIGHT", -35, 48)
+		VostigarChestsCheckBox:SetText(Lang.ACTIVEADDON)
+		VostigarChestsCheckBox:SetLabelPos("left")
+		VostigarChestsCheckBox:SetFontSize(12)
+		VostigarChestsCheckBox:SetLayer(1)
 
 		-- Create Reset Button  --
 		VostigarChestsResetPoint = UI.CreateFrame("RiftButton", VostigarChestsWindow:GetName().."_ResetPoint", VostigarChestsWindow)
@@ -71,21 +64,61 @@
 		VostigarChestsButton:SetHeight(30)
 		VostigarChestsButton:SetVisible(true)
 
-		-- Create Close button --
-		VostigarChestsButtonClose = UI.CreateFrame("RiftButton", VostigarChestsWindow:GetName().."_ButtonClose", VostigarChestsWindow)
-		VostigarChestsButtonClose:SetSkin("close")
-		VostigarChestsButtonClose:SetPoint("TOPRIGHT", VostigarChestsWindow, "TOPRIGHT", -4, 12)
+		-- -- Create Close button --
+		-- VostigarChestsButtonClose = UI.CreateFrame("RiftButton", VostigarChestsWindow:GetName().."_ButtonClose", VostigarChestsWindow)
+		-- VostigarChestsButtonClose:SetSkin("close")
+		-- VostigarChestsButtonClose:SetPoint("TOPRIGHT", VostigarChestsWindow, "TOPRIGHT", -4, 12)
 
 		-- Create Alert Frame --
 		VostigarChestsAlertFrame = UI.CreateFrame("Frame",  VostigarChestsWindow:GetName().."_AlertFrame", VostigarChestsContext)
 		VostigarChestsAlertFrame:SetPoint("CENTER", UIParent, "CENTERTOP",0, screenHeight)
-
 
 		VostigarChestsAlert = UI.CreateFrame("Text", VostigarChestsWindow:GetName().."_VostigarChestsAlert", VostigarChestsAlertFrame)
 		VostigarChestsAlert:SetPoint("CENTER", VostigarChestsAlertFrame, "CENTER", 0, 0)
 		VostigarChestsAlert:SetFontSize(28)
 		VostigarChestsAlert:SetFontColor(1, 1, 1)
 		VostigarChestsAlert:SetEffectGlow({ strength = 3 })
+
+		-- check if checked --
+		if VostigarChestsSettings["Activate"] then
+			VostigarChestsCheckBox:SetChecked(true)
+		else
+			VostigarChestsCheckBox:SetChecked(false)
+		end
+		-- Mise à jour quand on coche / décoche la case --
+		VostigarChestsCheckBox.Event.CheckboxChange = function(self)
+			VostigarChestsAlert:SetText(Lang.RELOADUI)
+			alertMessage()
+			VostigarChestsSettings["Activate"] = self:GetChecked()
+		end
+
+		if VostigarChestsSettings["Activate"] then
+			-- Create Scrolling Frame --
+			VostigarChestsScrollView = UI.CreateFrame("SimpleScrollView", VostigarChestsWindow:GetName().."_ScrollView", VostigarChestsWindow)
+			VostigarChestsScrollView:SetPoint("TOPLEFT", VostigarChestsWindow, "TOPLEFT", 30, 70)
+			VostigarChestsScrollView:SetWidth(VostigarChestsWindow:GetWidth() - 60)
+			VostigarChestsScrollView:SetHeight(VostigarChestsWindow:GetHeight() - 120)
+
+			-- Create Grid Frame --
+			VostigarChestsGrid = UI.CreateFrame("SimpleGrid", VostigarChestsWindow:GetName().."_Grid", VostigarChestsScrollView)
+			VostigarChestsGrid:SetPoint("TOPLEFT", VostigarChestsScrollView, "TOPLEFT")
+			VostigarChestsGrid:SetBackgroundColor(0, 0, 0, 0.5)
+			VostigarChestsGrid:SetWidth(VostigarChestsWindow:GetWidth())
+			VostigarChestsGrid:SetHeight(VostigarChestsWindow:GetHeight())
+			VostigarChestsGrid:SetMargin(1)
+			VostigarChestsGrid:SetCellPadding(1)
+		else
+
+			VostigarChestsActivateText = UI.CreateFrame("Text", VostigarChestsWindow:GetName().."_VostigarChestsActivateText", VostigarChestsWindow)
+			VostigarChestsActivateText:SetPoint("CENTER", VostigarChestsWindow, "CENTER", 0, 0)
+			VostigarChestsActivateText:SetFontSize(16)
+			VostigarChestsActivateText:SetEffectGlow({ strength = 3 })
+			VostigarChestsActivateText:SetFontColor(0.9, 0.9, 0.2 )
+			VostigarChestsActivateText:SetLayer(3)
+			VostigarChestsActivateText:SetVisible(true)
+			VostigarChestsActivateText:SetText("not active")
+
+		end
 	end
 
 	-- Write Name and Coord --
@@ -152,10 +185,15 @@
 		end
 		-- Read the addon --
 		VostigarChests()
-		-- Read mouse functions --
-		VostigarChestsFunctions()
-		-- Reads the coordinate function --
-		VostigarChestsGetData()
+		if VostigarChestsSettings["Activate"] then
+			-- Read mouse functions --
+			VostigarChestsFunctions()
+			-- Reads the coordinate function --
+			VostigarChestsGetData()
+		else
+			return
+		end
+
 		-- Write start addon Message --
 		print(Lang.SPACE .. Lang.ADDONSTART)
 	end

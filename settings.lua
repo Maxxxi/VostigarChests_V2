@@ -11,6 +11,10 @@
 	if VostigarChestsSettings == nil then 
 		VostigarChestsSettings = {} 
 	end
+	-- Define VostigarChestsSettings table --
+	if VostigarChestsSettings["Activate"] == nil then 
+		VostigarChestsSettings["Activate"] = true
+	end
 
 	-- Define VostigarChestsSettings table --
 	if VostigarChestsSettings.window == nil then

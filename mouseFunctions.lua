@@ -41,16 +41,16 @@
 			end
 		end
 
-		-- Event on close window --
-		function VostigarChestsButtonClose.Event:LeftPress()
-			if VostigarChestsWindow.visible then
-				VostigarChestsButton:SetTextureAsync(AddonId, "Pictures/ButtonDown.png")
-				VostigarChestsWindow:SetVisible(false)
-			end	
+		-- -- Event on close window --
+		-- function VostigarChestsButtonClose.Event:LeftPress()
+		-- 	if VostigarChestsWindow.visible then
+		-- 		VostigarChestsButton:SetTextureAsync(AddonId, "Pictures/ButtonDown.png")
+		-- 		VostigarChestsWindow:SetVisible(false)
+		-- 	end	
 
-			-- on / off button --
-			VostigarChestsWindow.visible = not VostigarChestsWindow.visible
-		end
+		-- 	-- on / off button --
+		-- 	VostigarChestsWindow.visible = not VostigarChestsWindow.visible
+		-- end
 
 		-- Reset waypoint --
 		function VostigarChestsResetPoint.Event:LeftPress()
