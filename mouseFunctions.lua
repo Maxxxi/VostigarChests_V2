@@ -17,10 +17,8 @@
 			else
 				VostigarChestsWindow:SetVisible(false)
 			end	
-
 			-- Apply texture --
 			self:SetTextureAsync(AddonId, "Pictures/ButtonUp.png")
-
 			-- on / off button --
 			VostigarChestsWindow.visible = not VostigarChestsWindow.visible
 		end
@@ -41,16 +39,14 @@
 			end
 		end
 
-		-- -- Event on close window --
-		-- function VostigarChestsButtonClose.Event:LeftPress()
-		-- 	if VostigarChestsWindow.visible then
-		-- 		VostigarChestsButton:SetTextureAsync(AddonId, "Pictures/ButtonDown.png")
-		-- 		VostigarChestsWindow:SetVisible(false)
-		-- 	end	
-
-		-- 	-- on / off button --
-		-- 	VostigarChestsWindow.visible = not VostigarChestsWindow.visible
-		-- end
+		-- Event on close window --
+		function VostigarChestsWindow.Event:Close()
+			if VostigarChestsWindow.visible then
+				VostigarChestsButton:SetTextureAsync(AddonId, "Pictures/ButtonDown.png")
+			end	
+			-- on / off button --
+			VostigarChestsWindow.visible = not VostigarChestsWindow.visible
+		end
 
 		-- Reset waypoint --
 		function VostigarChestsResetPoint.Event:LeftPress()

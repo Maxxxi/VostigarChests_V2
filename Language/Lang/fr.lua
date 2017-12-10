@@ -22,4 +22,5 @@
 		CHESTSFINDED		= "Emplaçement de coffre trouvé",
 		ACTIVEADDON			= "Activer",
 		RELOADUI			= "Vous devez faire un reloadui",
+		NOTACTIVE			= "Addon désactivé\nVeuillez cocher la case \"Activer\" pour le ré-activer",
 	})

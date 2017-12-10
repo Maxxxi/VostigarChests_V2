@@ -22,4 +22,5 @@
 		CHESTSFINDED		= "Chest location found",
 		ACTIVEADDON			= "Activate",
 		RELOADUI			= "You must make a reloadui",
+		NOTACTIVE			= "Addon disabled, check the Enable box to enable it again",
 	})

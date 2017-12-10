@@ -34,7 +34,7 @@
 
 	function alertMessage()
 		if Inspect.System.Watchdog() < 0.1 then return end
-		if Inspect.Time.Real() - InitTime > 3 then
+		if Inspect.Time.Real() - InitTime > 5 then
 			InitTime = Inspect.Time.Real()
 			VostigarChestsAlert:SetVisible(false)
 		end
@@ -62,12 +62,12 @@
 			-- Add a color according to the distance --
 			if distance <= 150 then
 				-- Add or clear waypoint --
-				if allreadyPointed == nil and distance <= 100  then
+				if allreadyPointed == nil and distance <= 500  then
 					-- Add waypoint --
 					Command.Map.Waypoint.Set(cX, cZ)
 					VostigarChestsAlert:SetText(Lang.CHESTSFINDED)
 					alertMessage()
-				elseif allreadyPointed == nil and distance > 100 then
+				elseif allreadyPointed == nil and distance > 500 then
 					-- Erase waypoint --
 					Command.Map.Waypoint.Clear()
 				elseif (allreadyPointed == nil or allreadyPointed == cX) and distance <= 10 then

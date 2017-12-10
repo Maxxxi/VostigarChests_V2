@@ -8,6 +8,10 @@
 	local AddonId = toc.identifier
 	local Lang = Library.Translate
 	local screenHeight = UIParent:GetHeight() / 4
+	local InitTime = Inspect.Time.Real()
+	local InitCounter = 0
+	-- Second to update coord --
+	local newTimer = 0.5
 
 	-- Chest coordinates and name of the zone --
 	coordData = {
@@ -39,7 +43,7 @@
 
 		-- CheckBox activation --
 		VostigarChestsCheckBox = UI.CreateFrame("SimpleCheckbox", VostigarChestsWindow:GetName().."_CheckBox", VostigarChestsWindow)
-		VostigarChestsCheckBox:SetPoint("TOPRIGHT", VostigarChestsWindow, "TOPRIGHT", -35, 48)
+		VostigarChestsCheckBox:SetPoint("BOTTOMRIGHT", VostigarChestsWindow, "BOTTOMRIGHT", -22, -18)
 		VostigarChestsCheckBox:SetText(Lang.ACTIVEADDON)
 		VostigarChestsCheckBox:SetLabelPos("left")
 		VostigarChestsCheckBox:SetFontSize(12)
@@ -48,7 +52,7 @@
 		-- Create Reset Button  --
 		VostigarChestsResetPoint = UI.CreateFrame("RiftButton", VostigarChestsWindow:GetName().."_ResetPoint", VostigarChestsWindow)
 		VostigarChestsResetPoint:SetText(Lang.RESETPOI)
-		VostigarChestsResetPoint:SetPoint("BOTTOMLEFT", VostigarChestsWindow, "BOTTOMCENTER", 0, -15)
+		VostigarChestsResetPoint:SetPoint("BOTTOMLEFT", VostigarChestsWindow, "BOTTOMCENTER", 0, -13)
 
 		-- Create Reset Button  --
 		VostigarChestsResetTable = UI.CreateFrame("RiftButton", VostigarChestsWindow:GetName().."_ResetTable", VostigarChestsWindow)
@@ -64,15 +68,10 @@
 		VostigarChestsButton:SetHeight(30)
 		VostigarChestsButton:SetVisible(true)
 
-		-- -- Create Close button --
-		-- VostigarChestsButtonClose = UI.CreateFrame("RiftButton", VostigarChestsWindow:GetName().."_ButtonClose", VostigarChestsWindow)
-		-- VostigarChestsButtonClose:SetSkin("close")
-		-- VostigarChestsButtonClose:SetPoint("TOPRIGHT", VostigarChestsWindow, "TOPRIGHT", -4, 12)
-
 		-- Create Alert Frame --
 		VostigarChestsAlertFrame = UI.CreateFrame("Frame",  VostigarChestsWindow:GetName().."_AlertFrame", VostigarChestsContext)
 		VostigarChestsAlertFrame:SetPoint("CENTER", UIParent, "CENTERTOP",0, screenHeight)
-
+		-- Alert Text Frame --
 		VostigarChestsAlert = UI.CreateFrame("Text", VostigarChestsWindow:GetName().."_VostigarChestsAlert", VostigarChestsAlertFrame)
 		VostigarChestsAlert:SetPoint("CENTER", VostigarChestsAlertFrame, "CENTER", 0, 0)
 		VostigarChestsAlert:SetFontSize(28)
@@ -87,18 +86,21 @@
 		end
 		-- Mise à jour quand on coche / décoche la case --
 		VostigarChestsCheckBox.Event.CheckboxChange = function(self)
-			VostigarChestsAlert:SetText(Lang.RELOADUI)
-			alertMessage()
+			if Inspect.Time.Real() - InitTime >= newTimer then 
+				InitTime = Inspect.Time.Real()
+				VostigarChestsAlert:SetText(Lang.RELOADUI)
+				alertMessage()
+			end
 			VostigarChestsSettings["Activate"] = self:GetChecked()
 		end
 
+		-- Si la case est activé, on affiche les coord --
 		if VostigarChestsSettings["Activate"] then
 			-- Create Scrolling Frame --
 			VostigarChestsScrollView = UI.CreateFrame("SimpleScrollView", VostigarChestsWindow:GetName().."_ScrollView", VostigarChestsWindow)
 			VostigarChestsScrollView:SetPoint("TOPLEFT", VostigarChestsWindow, "TOPLEFT", 30, 70)
 			VostigarChestsScrollView:SetWidth(VostigarChestsWindow:GetWidth() - 60)
 			VostigarChestsScrollView:SetHeight(VostigarChestsWindow:GetHeight() - 120)
-
 			-- Create Grid Frame --
 			VostigarChestsGrid = UI.CreateFrame("SimpleGrid", VostigarChestsWindow:GetName().."_Grid", VostigarChestsScrollView)
 			VostigarChestsGrid:SetPoint("TOPLEFT", VostigarChestsScrollView, "TOPLEFT")
@@ -108,16 +110,14 @@
 			VostigarChestsGrid:SetMargin(1)
 			VostigarChestsGrid:SetCellPadding(1)
 		else
-
 			VostigarChestsActivateText = UI.CreateFrame("Text", VostigarChestsWindow:GetName().."_VostigarChestsActivateText", VostigarChestsWindow)
 			VostigarChestsActivateText:SetPoint("CENTER", VostigarChestsWindow, "CENTER", 0, 0)
 			VostigarChestsActivateText:SetFontSize(16)
 			VostigarChestsActivateText:SetEffectGlow({ strength = 3 })
-			VostigarChestsActivateText:SetFontColor(0.9, 0.9, 0.2 )
+			VostigarChestsActivateText:SetFontColor(255, 0, 0 )
 			VostigarChestsActivateText:SetLayer(3)
 			VostigarChestsActivateText:SetVisible(true)
-			VostigarChestsActivateText:SetText("not active")
-
+			VostigarChestsActivateText:SetText(Lang.NOTACTIVE)
 		end
 	end
 
@@ -155,6 +155,12 @@
 				-- Add waypoint --
 				Command.Map.Waypoint.Set(v[2], v[3])
 			end, "Event.UI.Input.Mouse.Left.Click")
+
+			-- Event on Left Clic --
+			cellCoord:EventAttach(Event.UI.Input.Mouse.Right.Click, function(self, h)
+				-- Erase waypoint --
+				Command.Map.Waypoint.Clear()
+			end, "Event.UI.Input.Mouse.Right.Click")
 
 			-- Event Mouse in --
 			cellCoord:EventAttach(Event.UI.Input.Mouse.Cursor.In, function(self, h)
